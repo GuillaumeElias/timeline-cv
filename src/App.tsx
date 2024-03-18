@@ -7,9 +7,8 @@ import { Event } from "./types";
 import Summary from "./pieces/Summary";
 import TimelineTitle from "./pieces/TimelineTitle";
 
-export const MARGIN_TOP_TIMELINE: number = 200;
-export const TIMELINE_HEIGHT: number = 200;
-
+export const TIMELINE_HEIGHT: number = 300;
+export const LINE_HEIGHT: number = 60;
 export const MARGIN_SIDE: number = 5;
 
 const App: React.FC = () => {
@@ -19,11 +18,13 @@ const App: React.FC = () => {
   const [eventDetailsX, setEventDetailsX] = React.useState(0);
   const [eventDetailsY, setEventDetailsY] = React.useState(0);
 
+  const screenWidth = Math.min(
+    document.documentElement.clientWidth || 0,
+    window.innerWidth || 0
+  );
+
   const handleEventSelected = (
     event: Event,
-    x: number,
-    y: number,
-    lineHeight: number
   ): void => {
     setSelectedEvent(event);
     setEventDetailsX(mouseX);
@@ -46,25 +47,18 @@ const App: React.FC = () => {
           padding: 0,
           overflow: "hidden",
           position: "absolute",
-          //top: MARGIN_TOP_TIMELINE,
+          width: screenWidth - MARGIN_SIDE * 2,
+          height: TIMELINE_HEIGHT
         }}
       >
         <TimelineTitle />
         <Stage
           id="canvas"
-          width={window.innerWidth}
-          height={window.innerHeight}
+          width={screenWidth - MARGIN_SIDE * 2}
+          height={TIMELINE_HEIGHT}
           onMouseMove={(e) => {
-            const canvas = document.getElementById("canvas");
-            let topY = 0;
-            /*if (canvas) {
-              const stageYCoordinate =
-                canvas.getBoundingClientRect().top + window.pageYOffset;
-              console.log("Y Coordinate of Stage:", stageYCoordinate);
-              topY = stageYCoordinate;
-            }*/
             setMouseX(e.evt.clientX);
-            setMouseY(topY + e.evt.clientY);
+            setMouseY(e.evt.clientY);
           }}
         >
           <Layer key={0}>

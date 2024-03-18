@@ -4,17 +4,18 @@ import { tsToStr } from "../dateutil";
 import { Event, TYPES } from "../types";
 import { getFlagPath } from "../data";
 import UrlImg from "./UrlImg";
+import { LINE_HEIGHT } from "../App";
 
 interface TimelineEventProps {
   index: number;
   x: number;
   y: number;
   eventWidth: number;
-  lineHeight: number;
   event: Event;
   onEventSelected: (event: Event, x: number, y: number) => void;
   pause: boolean;
   selected: boolean;
+  pointedAt: boolean;
 }
 
 const EXPANDED_HEIGHT = 200;
@@ -24,11 +25,11 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
   x,
   y,
   eventWidth,
-  lineHeight,
   event,
   onEventSelected,
   pause,
   selected,
+  pointedAt
 }) => {
   const [hovered, setHovered] = useState<boolean>(false);
 
@@ -60,7 +61,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         x={x}
         y={y}
         width={eventWidth}
-        height={lineHeight}
+        height={LINE_HEIGHT + (pointedAt ? 1 : 0)}
         fill={TYPES[event.type]}
         stroke={TYPES[event.type]}
         strokeWidth={1 + (hovered ? 1 : 0)} // 1px border width
@@ -76,7 +77,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         fontStyle={selected ? "bold" : "normal"}
         fontSize={15}
       />
-      <UrlImg x={x + eventWidth - 30} y={y + lineHeight - 15} width={20} src={getFlagPath(event)} height={10} />
+      <UrlImg x={x + eventWidth - 30} y={y + LINE_HEIGHT - 15} width={20} src={getFlagPath(event)} height={10} />
     </Group>
   );
 };

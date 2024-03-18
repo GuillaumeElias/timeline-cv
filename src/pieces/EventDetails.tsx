@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Event, TYPES } from "../types";
 
-import { MARGIN_SIDE, MARGIN_TOP_TIMELINE, TIMELINE_HEIGHT } from "../App";
+import { MARGIN_SIDE, TIMELINE_HEIGHT } from "../App";
 import { getFlagPath } from "../data";
 
 interface EventDetailsProps {
@@ -22,9 +22,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   onClose,
 }) => {
   
-  const containerRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLSpanElement>(null);
-
   const screenWidth = Math.min(
     document.documentElement.clientWidth || 0,
     window.innerWidth || 0
@@ -37,16 +34,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     y += MOUSE_OFFSET;
   }
 
-  useEffect(() => {
-    if (containerRef.current && closeButtonRef.current) {
-      containerRef.current.focus();
-    }
-  }, []);
-
   return (
     <div
       id="eventDetailsContainer"
-      ref={containerRef}
       tabIndex={-1}
       style={{
         position: "absolute",
@@ -63,7 +53,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     >
       
         <span
-          ref={closeButtonRef}
           style={{
             fontSize: "20px",
             cursor: "pointer",
