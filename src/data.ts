@@ -11,8 +11,10 @@ export const timelineData: Event[] = [
     description: "Completed the journey in Software Engineering (Bachelor's degree)",
     place: "Strawberry Fields University, Liverpool",
     country: "Belgium",
+    fullTime: true,
+    timePercentage: 100,
+    selfEmployed: false,
   },
-
   {
     label: "Ticket to Ride at Penny Lane",
     startDate: toTs("2012-10-01"),
@@ -22,8 +24,10 @@ export const timelineData: Event[] = [
     place: "Penny Lane Technologies, London",
     country: "UK",
     description: "Worked on various projects involving software development and integration.",
+    fullTime: true,
+    timePercentage: 100,
+    selfEmployed: false,
   },
-
   {
     label: "Lucy in the Sky with C++",
     startDate: toTs("2016-10-01"),
@@ -33,8 +37,10 @@ export const timelineData: Event[] = [
     place: "Lucy's Software House, Liverpool",
     country: "UK",
     description: "Developed C++ applications for various clients, contributing to innovative solutions.",
+    fullTime: true,
+    timePercentage: 100,
+    selfEmployed: false,
   },
-
   {
     label: "Teacher's Pet Sounds",
     startDate: toTs("2018-09-01"),
@@ -45,8 +51,10 @@ export const timelineData: Event[] = [
     place: "Abbey Road Institute, London",
     country: "UK",
     description: "Attended teacher training program focusing on modern educational techniques and pedagogy.",
+    fullTime: false,
+    timePercentage: 20,
+    selfEmployed: false,
   },
-
   {
     label: "I Am the Walrus - Computer Science Edition",
     startDate: toTs("2018-10-01"),
@@ -56,8 +64,10 @@ export const timelineData: Event[] = [
     place: "Magical Mystery University, Liverpool",
     country: "UK",
     description: "Taught computer science courses to undergraduate students, emphasizing practical skills and problem-solving.",
+    fullTime: false,
+    timePercentage: 66,
+    selfEmployed: false,
   },
-
   {
     label: "Help! - Remote Consultant",
     startDate: toTs("2019-01-01"),
@@ -68,6 +78,9 @@ export const timelineData: Event[] = [
     place: "Help Desk, [remote]",
     country: "UK",
     description: "Provided remote consultancy services for software development projects, troubleshooting and advising on technical issues.",
+    fullTime: false,
+    timePercentage: 33,
+    selfEmployed: true,
   },
   {
     label: "Here Comes the Sun: Coordinator",
@@ -78,6 +91,9 @@ export const timelineData: Event[] = [
     place: "Here Comes the Sun Institute, Liverpool",
     country: "UK",
     description: "Coordinated educational programs and activities, overseeing curriculum development and student engagement initiatives.",
+    fullTime: false,
+    timePercentage: 50,
+    selfEmployed: false,
   },
   {
     label: "Hey Jude, I'm a Teacher",
@@ -88,6 +104,9 @@ export const timelineData: Event[] = [
     place: "Hey Jude High School, Liverpool",
     country: "UK",
     description: "Taught mathematics and computer science courses to high school students, fostering critical thinking and analytical skills.",
+    fullTime: false,
+    timePercentage: 60,
+    selfEmployed: false,
   },
   {
     label: "Yesterday: Teacher in Canada",
@@ -98,8 +117,12 @@ export const timelineData: Event[] = [
     place: "Yesterday High School, Ontario, Canada",
     country: "Canada",
     description: "Embarked on a teaching journey in Canada, imparting knowledge and nurturing young minds in mathematics and computer science.",
+    fullTime: false,
+    timePercentage: 50,
+    selfEmployed: false,
   },
 ];
+
 
 
 export const getFlagPath = (event: Event) : string => {

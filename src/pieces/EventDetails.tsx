@@ -13,7 +13,6 @@ interface EventDetailsProps {
 }
 
 const WIDTH: number = 500;
-const HEIGHT: number = 200;
 const MOUSE_OFFSET: number = 5;
 
 const EventDetails: React.FC<EventDetailsProps> = ({
@@ -45,7 +44,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         left: x,
         backgroundColor: "white",
         width: WIDTH + "px",
-        height: "200px",
         borderRadius: "1px",
         padding: "5px",
         border: "2px solid " + TYPES[event.type],
@@ -67,9 +65,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           ✖
         </span>
         <h4>{event.label}</h4>
+        {event.selfEmployed && <p className="selfEmployed"><i>Self-employed</i></p>}
         <b>{event.place} </b>     <img src={getFlagPath(event)} height={20} />
         <p>{event.description}</p>
         <p>Duration : {calculateDuration(event)}</p>
+        <p>Time allocation : {event.timePercentage}%</p>
         <input
         type="text"
         style={{ position: "absolute", left: "-9999px", opacity: 0 }}

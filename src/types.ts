@@ -16,4 +16,7 @@ export type Event = {
   country?: string;
   hoursPerWeek?: string;
   expanded?: boolean;
+  fullTime: boolean;
+  timePercentage: number;
+  selfEmployed: boolean;
 };

@@ -5,6 +5,7 @@ import { Event, TYPES } from "../types";
 import { getFlagPath } from "../data";
 import UrlImg from "./UrlImg";
 import { LINE_HEIGHT } from "../App";
+import TinyPieChart from "./TinyPieChart";
 
 interface TimelineEventProps {
   index: number;
@@ -78,6 +79,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         fontSize={15}
       />
       <UrlImg x={x + eventWidth - 30} y={y + LINE_HEIGHT - 15} width={20} src={getFlagPath(event)} height={10} />
+      <TinyPieChart x={x + eventWidth - 50} y={y + LINE_HEIGHT - 15} percentage={event.timePercentage} radius={5} backgroundColor={TYPES[event.type]} />
     </Group>
   );
 };
