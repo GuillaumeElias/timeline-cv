@@ -11,12 +11,14 @@ interface Props {
   onEventSelected: (event: Event) => void;
   onEventDeselected: () => void;
   selectedEvent: null | Event;
+  screenWidth: number;
 }
 
 const Timeline: React.FC<Props> = ({
   onEventSelected,
   onEventDeselected,
   selectedEvent,
+  screenWidth,
 }) => {
   timelineData.sort((a, b) => {
     const endDateA = a.endDate || a.startDate;
@@ -27,12 +29,7 @@ const Timeline: React.FC<Props> = ({
   // Constants
   const numberOfLines = 3;
   const marginHeight = 8;
-
   const legendHeight = 20;
-  const screenWidth = Math.min(
-    document.documentElement.clientWidth || 0,
-    window.innerWidth || 0
-  );
 
   const timelineStartDate = timelineData[0].startDate;
   const timelineEndDate = toTs("2025-01-01");
@@ -141,7 +138,7 @@ const Timeline: React.FC<Props> = ({
       window.removeEventListener("mousemove", handleMouseMove);
       anim.stop();
     };
-  }, [selectedEvent]);
+  }, [selectedEvent, screenWidth]);
 
   return (
     <Group

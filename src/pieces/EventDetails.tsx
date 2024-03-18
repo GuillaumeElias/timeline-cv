@@ -27,8 +27,13 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     window.innerWidth || 0
   );
 
-  if (x + MOUSE_OFFSET + WIDTH > screenWidth - MARGIN_SIDE * 5) {
-    x = screenWidth - MARGIN_SIDE * 5 - WIDTH;
+  let width = WIDTH;
+  if(screenWidth - MARGIN_SIDE * 5 < width){
+    width = screenWidth - MARGIN_SIDE * 5;
+  }
+
+  if (x + MOUSE_OFFSET + width > screenWidth - MARGIN_SIDE * 5) {
+    x = screenWidth - MARGIN_SIDE * 5 - width;
   } else {
     x += MOUSE_OFFSET;
     y += MOUSE_OFFSET;
@@ -43,7 +48,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         top: y,
         left: x,
         backgroundColor: "white",
-        width: WIDTH + "px",
+        width: width + "px",
         borderRadius: "1px",
         padding: "5px",
         border: "2px solid " + TYPES[event.type],

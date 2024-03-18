@@ -1,5 +1,5 @@
 import "./styles.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import Timeline from "./timeline/Timeline";
 import EventDetails from "./pieces/EventDetails";
@@ -18,10 +18,29 @@ const App: React.FC = () => {
   const [eventDetailsX, setEventDetailsX] = React.useState(0);
   const [eventDetailsY, setEventDetailsY] = React.useState(0);
 
-  const screenWidth = Math.min(
-    document.documentElement.clientWidth || 0,
-    window.innerWidth || 0
+  const [screenWidth, setScreenWidth] = React.useState(
+    Math.min(
+      document.documentElement.clientWidth || 0,
+      window.innerWidth || 0
+    )
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(
+        Math.min(
+          document.documentElement.clientWidth || 0,
+          window.innerWidth || 0
+        )
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleEventSelected = (
     event: Event,
@@ -66,6 +85,7 @@ const App: React.FC = () => {
               onEventSelected={handleEventSelected}
               onEventDeselected={handleEventDeselected}
               selectedEvent={selectedEvent}
+              screenWidth={screenWidth}
             />
           </Layer>
         </Stage>
