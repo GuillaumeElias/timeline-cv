@@ -3,6 +3,7 @@ import { Event, TYPES } from "../types";
 
 import { MARGIN_SIDE, TIMELINE_HEIGHT } from "../App";
 import { getFlagPath } from "../data";
+import { calculateDuration } from "../dateutil";
 
 interface EventDetailsProps {
   event: Event;
@@ -67,8 +68,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         </span>
         <h4>{event.label}</h4>
         <b>{event.place} </b>     <img src={getFlagPath(event)} height={20} />
-
         <p>{event.description}</p>
+        <p>Duration : {calculateDuration(event)}</p>
         <input
         type="text"
         style={{ position: "absolute", left: "-9999px", opacity: 0 }}
