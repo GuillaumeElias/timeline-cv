@@ -27,7 +27,7 @@ const Timeline: React.FC<Props> = ({
   // Constants
   const numberOfLines = 3;
   const marginHeight = 8;
-  
+
   const legendHeight = 20;
   const screenWidth = Math.min(
     document.documentElement.clientWidth || 0,
@@ -76,15 +76,17 @@ const Timeline: React.FC<Props> = ({
     setMouseDate(mouseTimestamp);
   };
 
+  const isMouseInTimeline = (mouseY: number): boolean =>
+    mouseY !== undefined &&
+    timelineMarginTopRef.current !== undefined &&
+    mouseY < timelineMarginTopRef.current + TIMELINE_HEIGHT &&
+    mouseY > timelineMarginTopRef.current;
+
   const anim = new Konva.Animation((frame) => {
     if (selectedEvent) return;
-    
+
     if (mouseXRef.current) {
-      if (
-        mouseYRef.current && timelineMarginTopRef.current &&
-        mouseYRef.current < timelineMarginTopRef.current + TIMELINE_HEIGHT &&
-        mouseYRef.current > timelineMarginTopRef.current
-      ) {
+      if (mouseYRef.current && isMouseInTimeline(mouseYRef.current)) {
         const deltaX = Math.abs(mouseXRef.current - screenWidth / 2);
         if (
           scrollXRef.current + screenWidth < timelineWidth &&
@@ -115,9 +117,11 @@ const Timeline: React.FC<Props> = ({
     const handleMouseMove = (event: MouseEvent) => {
       if (selectedEvent) return;
       if (event && event.clientX > 0 && event.clientY > 0) {
-        setMouseX(event.clientX);
-        setMouseY(event.clientY);
-        computeAndSetMouseDate(event.clientX);
+        if (event.clientY && isMouseInTimeline(event.clientY)) {
+          setMouseX(event.clientX);
+          setMouseY(event.clientY);
+          computeAndSetMouseDate(event.clientX);
+        }
       }
     };
 
@@ -188,7 +192,7 @@ const Timeline: React.FC<Props> = ({
         const endX = (endTimeOffset / totalTime) * timelineWidth;
         const eventWidth = endX - startX;
 
-        const pointedAt : boolean =
+        const pointedAt: boolean =
           !selectedEvent &&
           !!mouseX &&
           mouseX + scrollX > startX &&
@@ -206,7 +210,9 @@ const Timeline: React.FC<Props> = ({
               event={event}
               pause={!!selectedEvent}
               selected={event == selectedEvent}
-              onEventSelected={(e: Event, x: number, y: number) => onEventSelected(e) }
+              onEventSelected={(e: Event, x: number, y: number) =>
+                onEventSelected(e)
+              }
             />
             {!event.hideDate && (
               <Text
