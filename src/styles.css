@@ -14,3 +14,11 @@
 .selfEmployed {
   font-style: normal;
 }
+
+.PersonalInfo{
+  text-align: left;
+}
+
+.PersonalInfo img{
+  vertical-align:middle;
+}

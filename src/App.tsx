@@ -1,13 +1,14 @@
 import "./styles.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import Timeline from "./timeline/Timeline";
 import EventDetails from "./pieces/EventDetails";
 import { Event } from "./types";
 import Summary from "./pieces/Summary";
 import TimelineTitle from "./pieces/TimelineTitle";
+import PersonalInfo from "./pieces/PersonalInfo";
 
-export const TIMELINE_HEIGHT: number = 300;
+export const TIMELINE_HEIGHT: number = 250;
 export const LINE_HEIGHT: number = 60;
 export const MARGIN_SIDE: number = 5;
 
@@ -25,6 +26,8 @@ const App: React.FC = () => {
     )
   );
 
+  const timelineBottomYRef = useRef(0);
+
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(
@@ -36,6 +39,11 @@ const App: React.FC = () => {
     };
 
     window.addEventListener("resize", handleResize);
+
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      timelineBottomYRef.current = canvas.getBoundingClientRect().top + window.pageYOffset + TIMELINE_HEIGHT;
+    }
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -58,7 +66,7 @@ const App: React.FC = () => {
     <div className="App">
       <h1>Guillaume Elias</h1>
       <Summary />
-
+      <TimelineTitle />
       <div
         id="timelineWrapper"
         style={{
@@ -70,7 +78,6 @@ const App: React.FC = () => {
           height: TIMELINE_HEIGHT
         }}
       >
-        <TimelineTitle />
         <Stage
           id="canvas"
           width={screenWidth - MARGIN_SIDE * 2}
@@ -98,6 +105,10 @@ const App: React.FC = () => {
           onClose={handleEventDeselected}
         />
       )}
+      <div id="personalInfoSection" style={{position: "absolute", top: timelineBottomYRef.current ? timelineBottomYRef.current : TIMELINE_HEIGHT + 160}}>
+        <PersonalInfo />
+      </div>
+
     </div>
   );
 };

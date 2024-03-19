@@ -103,7 +103,7 @@ const Timeline: React.FC<Props> = ({
 
   React.useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      if (selectedEvent) return;
+      if (selectedEvent || isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
         prevWidth + event.deltaY < MAX_TIMELINE_WIDTH
@@ -155,8 +155,6 @@ const Timeline: React.FC<Props> = ({
         width={timelineWidth}
         height={TIMELINE_HEIGHT}
         fill={"transparent"}
-        strokeWidth={2}
-        stoke="black"
       />
 
       {mouseX && (
@@ -166,13 +164,13 @@ const Timeline: React.FC<Props> = ({
             x={mouseX}
             y={0}
             width={1}
-            height={TIMELINE_HEIGHT - 50}
+            height={TIMELINE_HEIGHT - 5}
             fill="#93003a"
           />
           <Text
             id="tracking-text"
             x={mouseX < screenWidth - 100 ? mouseX + 5 : mouseX - 60}
-            y={TIMELINE_HEIGHT - 50 - legendHeight / 2} // Adjust vertical position
+            y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
             text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
             fill="#93003a"
             fontFamily="Courier New, monospace"
@@ -215,7 +213,7 @@ const Timeline: React.FC<Props> = ({
               <Text
                 key={"text_" + index}
                 x={MARGIN_SIDE + startX - scrollX - 4}
-                y={TIMELINE_HEIGHT - 75}
+                y={TIMELINE_HEIGHT - 35}
                 text={"| " + tsToShortStr(event.startDate)}
                 fill="black"
                 fontFamily="Courier New, monospace"
