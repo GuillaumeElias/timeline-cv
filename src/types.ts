@@ -1,5 +1,6 @@
 export const TYPES = {
   EDUCATION: "#28a745",
+  INTERNSHIP: "#DBA507",
   IT_WORK: "#007bff",
   SCHOOL: "#ff005e",
 };

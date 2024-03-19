@@ -76,10 +76,14 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         fill="white"
         fontFamily="Courier New, monospace"
         fontStyle={selected ? "bold" : "normal"}
-        fontSize={15}
+        fontSize={event.type == "INTERNSHIP" ? 13 : 15}
       />
-      <UrlImg x={x + eventWidth - 30} y={y + LINE_HEIGHT - 15} width={20} src={getFlagPath(event)} height={10} />
-      <TinyPieChart x={x + eventWidth - 50} y={y + LINE_HEIGHT - 15} percentage={event.timePercentage} radius={5} backgroundColor={TYPES[event.type]} />
+      { event.type != "INTERNSHIP" && 
+        <>
+          <UrlImg x={x + eventWidth - 30} y={y + LINE_HEIGHT - 15} width={20} src={getFlagPath(event)} height={10} />
+          <TinyPieChart x={x + eventWidth - 50} y={y + LINE_HEIGHT - 15} percentage={event.timePercentage} radius={5} backgroundColor={TYPES[event.type]} />
+        </>
+      }
     </Group>
   );
 };

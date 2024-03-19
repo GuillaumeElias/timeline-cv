@@ -9,7 +9,7 @@ const TechnicalInfo: React.FC = () => (
     <img src="images/javalogo.png" height={25} /> Spring<br/>
     <img src="images/python.png" height={25} /> Tkinter, Numpy<br/>
     <img src="images/asm.png" height={25} /> Assembly language and embedded programming (x86/AVR)<br/>
-    <img src="images/linux.png" height={25} /> System admin experience in Ubuntu and CentOS<br/>
+    <img src="images/linux.png" height={25} /> System admin experience on Ubuntu and CentOS<br/>
     </p>
   </div>
 );

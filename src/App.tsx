@@ -29,7 +29,7 @@ const App: React.FC = () => {
   );
 
   const timelineBottomYRef = useRef(0);
-  const defaultInfoSectionY = screenWidth <= 600 ? TIMELINE_HEIGHT + 250 : TIMELINE_HEIGHT + 180;
+  const defaultInfoSectionY = screenWidth <= 600 ? TIMELINE_HEIGHT + 290 : TIMELINE_HEIGHT + 180;
 
   useEffect(() => {
     const handleResize = () => {
