@@ -8,6 +8,7 @@ import Summary from "./pieces/Summary";
 import TimelineTitle from "./pieces/TimelineTitle";
 import PersonalInfo from "./pieces/PersonalInfo";
 import TechnicalInfo from "./pieces/TechnicalInfo";
+import SeeSource from "./pieces/SeeSource";
 
 export const TIMELINE_HEIGHT: number = 250;
 export const LINE_HEIGHT: number = 60;
@@ -28,7 +29,7 @@ const App: React.FC = () => {
   );
 
   const timelineBottomYRef = useRef(0);
-  const defaultInfoSectionY = screenWidth <= 500 ? TIMELINE_HEIGHT + 250 : TIMELINE_HEIGHT + 160;
+  const defaultInfoSectionY = screenWidth <= 600 ? TIMELINE_HEIGHT + 250 : TIMELINE_HEIGHT + 180;
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,6 +72,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>Guillaume Elias</h1>
+      <SeeSource />
       <Summary />
       <TimelineTitle />
       <div

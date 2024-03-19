@@ -33,6 +33,10 @@
   flex: 1;
 }
 
+.PersonalInfo a,.PersonalInfo a:visited{
+  color: black;
+}
+
 @media screen and (max-width: 500px) {
   .infoSection {
     flex-direction: column;
@@ -40,4 +44,15 @@
   .TechnicalInfo, .PersonalInfo {
     width: 100%;
   }
+}
+
+.offseted{
+  padding-left: 67px;
+}
+
+.SeeSource {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
 }
