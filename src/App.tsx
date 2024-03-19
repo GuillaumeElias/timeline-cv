@@ -36,6 +36,10 @@ const App: React.FC = () => {
           window.innerWidth || 0
         )
       );
+      const canvas = document.getElementById("canvas");
+      if (canvas) {
+        timelineBottomYRef.current = canvas.getBoundingClientRect().top + window.pageYOffset + TIMELINE_HEIGHT;
+      }
     };
 
     window.addEventListener("resize", handleResize);
