@@ -7,6 +7,7 @@ import { Event } from "./types";
 import Summary from "./pieces/Summary";
 import TimelineTitle from "./pieces/TimelineTitle";
 import PersonalInfo from "./pieces/PersonalInfo";
+import TechnicalInfo from "./pieces/TechnicalInfo";
 
 export const TIMELINE_HEIGHT: number = 250;
 export const LINE_HEIGHT: number = 60;
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   );
 
   const timelineBottomYRef = useRef(0);
+  const defaultInfoSectionY = screenWidth <= 500 ? TIMELINE_HEIGHT + 250 : TIMELINE_HEIGHT + 160;
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,6 +103,10 @@ const App: React.FC = () => {
           </Layer>
         </Stage>
       </div>
+      <div className="infoSection" style={{position: "absolute", top: timelineBottomYRef.current ? timelineBottomYRef.current : defaultInfoSectionY}}>
+        <TechnicalInfo />
+        <PersonalInfo />
+      </div>
       {selectedEvent && (
         <EventDetails
           x={eventDetailsX}
@@ -109,10 +115,6 @@ const App: React.FC = () => {
           onClose={handleEventDeselected}
         />
       )}
-      <div id="personalInfoSection" style={{position: "absolute", top: timelineBottomYRef.current ? timelineBottomYRef.current : TIMELINE_HEIGHT + 160}}>
-        <PersonalInfo />
-      </div>
-
     </div>
   );
 };

@@ -15,10 +15,29 @@
   font-style: normal;
 }
 
-.PersonalInfo{
-  text-align: left;
+.infoSection{
+  display: flex;
 }
 
-.PersonalInfo img{
+.TechnicalInfo{
+  text-align: left;
+  flex: 1;
+}
+
+.TechnicalInfo img{
   vertical-align:middle;
+}
+
+.PersonalInfo{
+  text-align: left;
+  flex: 1;
+}
+
+@media screen and (max-width: 500px) {
+  .infoSection {
+    flex-direction: column;
+  }
+  .TechnicalInfo, .PersonalInfo {
+    width: 100%;
+  }
 }
