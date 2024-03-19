@@ -103,7 +103,7 @@ const Timeline: React.FC<Props> = ({
 
   React.useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      if (selectedEvent || isMouseInTimeline(event.clientY)) return;
+      if (selectedEvent || !isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
         prevWidth + event.deltaY < MAX_TIMELINE_WIDTH
