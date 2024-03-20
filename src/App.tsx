@@ -1,6 +1,5 @@
 import "./styles.css";
 import React, { useEffect, useRef } from "react";
-import { Stage, Layer, Rect } from "react-konva";
 import Timeline from "./timeline/Timeline";
 import EventDetails from "./pieces/EventDetails";
 import { Event } from "./types";
@@ -16,8 +15,6 @@ export const MARGIN_SIDE: number = 5;
 
 const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null);
-  const [mouseX, setMouseX] = React.useState(0);
-  const [mouseY, setMouseY] = React.useState(0);
   const [eventDetailsX, setEventDetailsX] = React.useState(0);
   const [eventDetailsY, setEventDetailsY] = React.useState(0);
 
@@ -59,6 +56,8 @@ const App: React.FC = () => {
 
   const handleEventSelected = (
     event: Event,
+    mouseX: number,
+    mouseY: number
   ): void => {
     setSelectedEvent(event);
     setEventDetailsX(mouseX);
@@ -75,36 +74,14 @@ const App: React.FC = () => {
       <SeeSource />
       <Summary />
       <TimelineTitle />
-      <div
-        id="timelineWrapper"
-        style={{
-          margin: 0,
-          padding: 0,
-          overflow: "hidden",
-          position: "absolute",
-          width: screenWidth - MARGIN_SIDE * 2,
-          height: TIMELINE_HEIGHT
-        }}
-      >
-        <Stage
-          id="canvas"
-          width={screenWidth - MARGIN_SIDE * 2}
-          height={TIMELINE_HEIGHT}
-          onMouseMove={(e) => {
-            setMouseX(e.evt.clientX);
-            setMouseY(e.evt.clientY);
-          }}
-        >
-          <Layer key={0}>
+      
             <Timeline
               onEventSelected={handleEventSelected}
               onEventDeselected={handleEventDeselected}
               selectedEvent={selectedEvent}
               screenWidth={screenWidth}
             />
-          </Layer>
-        </Stage>
-      </div>
+          
       <div className="infoSection" style={{position: "absolute", top: timelineBottomYRef.current ? timelineBottomYRef.current : defaultInfoSectionY}}>
         <TechnicalInfo />
         <PersonalInfo />

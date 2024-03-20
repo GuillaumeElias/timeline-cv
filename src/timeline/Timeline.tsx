@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Group, Rect, Text } from "react-konva";
+import { Stage, Layer, Rect, Group, Text } from "react-konva";
 import TimelineEvent from "./TimelineEvent";
 import { toTs, tsToShortStr } from "../dateutil";
 import { Event, TYPES } from "../types";
@@ -8,7 +8,7 @@ import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
 
 interface Props {
-  onEventSelected: (event: Event) => void;
+  onEventSelected: (event: Event, mouseX:number, mouseY: number) => void;
   onEventDeselected: () => void;
   selectedEvent: null | Event;
   screenWidth: number;
@@ -86,7 +86,7 @@ const Timeline: React.FC<Props> = ({
       if (mouseYRef.current && isMouseInTimeline(mouseYRef.current)) {
         const deltaX = Math.abs(mouseXRef.current - screenWidth / 2);
         if (
-          scrollXRef.current + screenWidth < timelineWidth &&
+          scrollXRef.current + screenWidth < timelineWidthRef.current &&
           mouseXRef.current > (screenWidth / 3) * 2
         ) {
           setScrollX((prevX) => prevX + deltaX / 60);
@@ -141,88 +141,112 @@ const Timeline: React.FC<Props> = ({
   }, [selectedEvent, screenWidth]);
 
   return (
-    <Group
-      onClick={() => {
-        if (selectedEvent) {
-          onEventDeselected();
-        }
+    <div
+      id="timelineWrapper"
+      style={{
+        margin: 0,
+        padding: 0,
+        overflow: "hidden",
+        position: "absolute",
+        width: screenWidth - MARGIN_SIDE * 2,
+        height: TIMELINE_HEIGHT,
       }}
     >
-      <Rect
-        id="timeline-background"
-        x={MARGIN_SIDE}
-        y={0}
-        width={timelineWidth}
+      <Stage
+        id="canvas"
+        width={screenWidth - MARGIN_SIDE * 2}
         height={TIMELINE_HEIGHT}
-        fill={"transparent"}
-      />
-
-      {mouseX && (
-        <>
-          <Rect
-            id="tracking-line"
-            x={mouseX}
-            y={0}
-            width={1}
-            height={TIMELINE_HEIGHT - 5}
-            fill="#93003a"
-          />
-          <Text
-            id="tracking-text"
-            x={mouseX < screenWidth - 100 ? mouseX + 5 : mouseX - 60}
-            y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
-            text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
-            fill="#93003a"
-            fontFamily="Courier New, monospace"
-          />
-        </>
-      )}
-
-      {timelineData.map((event, index) => {
-        const startTimeOffset = event.startDate - timelineStartDate;
-        const endTimeOffset = event.endDate
-          ? event.endDate - timelineStartDate
-          : totalTime;
-        const startX = (startTimeOffset / totalTime) * timelineWidth;
-        const endX = (endTimeOffset / totalTime) * timelineWidth;
-        const eventWidth = endX - startX;
-
-        const pointedAt: boolean =
-          !selectedEvent &&
-          !!mouseX &&
-          mouseX + scrollX > startX &&
-          mouseX + scrollX < endX;
-
-        return (
-          <Group key={"group_" + index}>
-            <TimelineEvent
-              key={index}
-              index={index}
-              x={MARGIN_SIDE + startX - scrollX}
-              y={4 + event.line * LINE_HEIGHT + marginHeight * event.line}
-              eventWidth={eventWidth}
-              pointedAt={pointedAt}
-              event={event}
-              pause={!!selectedEvent}
-              selected={event == selectedEvent}
-              onEventSelected={(e: Event, x: number, y: number) =>
-                onEventSelected(e)
+        onMouseMove={(e) => {
+          setMouseX(e.evt.clientX);
+          setMouseY(e.evt.clientY);
+        }}
+      >
+        <Layer key={0}>
+          <Group
+            onClick={() => {
+              if (selectedEvent) {
+                onEventDeselected();
               }
+            }}
+          >
+            <Rect
+              id="timeline-background"
+              x={MARGIN_SIDE}
+              y={0}
+              width={timelineWidth}
+              height={TIMELINE_HEIGHT}
+              fill={"transparent"}
             />
-            {!event.hideDate && (
-              <Text
-                key={"text_" + index}
-                x={MARGIN_SIDE + startX - scrollX - 4}
-                y={TIMELINE_HEIGHT - 35}
-                text={"| " + tsToShortStr(event.startDate)}
-                fill="black"
-                fontFamily="Courier New, monospace"
-              />
+
+            {mouseX && (
+              <>
+                <Rect
+                  id="tracking-line"
+                  x={mouseX}
+                  y={0}
+                  width={1}
+                  height={TIMELINE_HEIGHT - 5}
+                  fill="#93003a"
+                />
+                <Text
+                  id="tracking-text"
+                  x={mouseX < screenWidth - 100 ? mouseX + 5 : mouseX - 60}
+                  y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
+                  text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
+                  fill="#93003a"
+                  fontFamily="Courier New, monospace"
+                />
+              </>
             )}
+
+            {timelineData.map((event, index) => {
+              const startTimeOffset = event.startDate - timelineStartDate;
+              const endTimeOffset = event.endDate
+                ? event.endDate - timelineStartDate
+                : totalTime;
+              const startX = (startTimeOffset / totalTime) * timelineWidth;
+              const endX = (endTimeOffset / totalTime) * timelineWidth;
+              const eventWidth = endX - startX;
+
+              const pointedAt: boolean =
+                !selectedEvent &&
+                !!mouseX &&
+                mouseX + scrollX > startX &&
+                mouseX + scrollX < endX;
+
+              return (
+                <Group key={"group_" + index}>
+                  <TimelineEvent
+                    key={index}
+                    index={index}
+                    x={MARGIN_SIDE + startX - scrollX}
+                    y={4 + event.line * LINE_HEIGHT + marginHeight * event.line}
+                    eventWidth={eventWidth}
+                    pointedAt={pointedAt}
+                    event={event}
+                    pause={!!selectedEvent}
+                    selected={event == selectedEvent}
+                    onEventSelected={(e: Event, x: number, y: number) =>
+                      mouseX && mouseY && onEventSelected(e, mouseX, mouseY)
+                    }
+                  />
+                  {!event.hideDate && (
+                    <Text
+                      key={"text_" + index}
+                      x={MARGIN_SIDE + startX - scrollX - 4}
+                      y={TIMELINE_HEIGHT - 35}
+                      text={"| " + tsToShortStr(event.startDate)}
+                      fill="black"
+                      fontFamily="Courier New, monospace"
+                    />
+                  )}
+                </Group>
+              );
+            })}
           </Group>
-        );
-      })}
-    </Group>
+        </Layer>
+      </Stage>
+    </div>
   );
 };
 
