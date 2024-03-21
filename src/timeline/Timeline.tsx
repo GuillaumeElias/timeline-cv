@@ -8,10 +8,11 @@ import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
 
 interface Props {
-  onEventSelected: (event: Event, mouseX:number, mouseY: number) => void;
+  onEventSelected: (event: Event, mouseX: number, mouseY: number) => void;
   onEventDeselected: () => void;
   selectedEvent: null | Event;
   screenWidth: number;
+  scrollY: number;
 }
 
 const Timeline: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const Timeline: React.FC<Props> = ({
   onEventDeselected,
   selectedEvent,
   screenWidth,
+  scrollY,
 }) => {
   timelineData.sort((a, b) => {
     const endDateA = a.endDate || a.startDate;
@@ -27,7 +29,6 @@ const Timeline: React.FC<Props> = ({
   });
 
   // Constants
-  const numberOfLines = 3;
   const marginHeight = 8;
   const legendHeight = 20;
 
@@ -64,6 +65,13 @@ const Timeline: React.FC<Props> = ({
   useEffect(() => {
     timelineWidthRef.current = timelineWidth;
   }, [timelineWidth]);
+
+  useEffect(() => {
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      timelineMarginTopRef.current = canvas.getBoundingClientRect().top;
+    }
+  }, [scrollY, screenWidth]);
 
   const computeAndSetMouseDate = (prevX: number) => {
     const mouseTimestamp =
@@ -108,7 +116,7 @@ const Timeline: React.FC<Props> = ({
       setTimelineWidth((prevWidth) =>
         prevWidth + event.deltaY < MAX_TIMELINE_WIDTH
           ? prevWidth
-          : prevWidth + event.deltaY
+          : prevWidth + event.deltaY,
       );
     };
     const handleMouseMove = (event: MouseEvent) => {
@@ -124,12 +132,6 @@ const Timeline: React.FC<Props> = ({
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("mousemove", handleMouseMove);
-
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-      timelineMarginTopRef.current =
-        canvas.getBoundingClientRect().top + window.pageYOffset;
-    }
 
     anim.start();
 
@@ -227,7 +229,9 @@ const Timeline: React.FC<Props> = ({
                     pause={!!selectedEvent}
                     selected={event == selectedEvent}
                     onEventSelected={(e: Event, x: number, y: number) =>
-                      mouseX && mouseY && onEventSelected(e, mouseX, mouseY)
+                      mouseX &&
+                      mouseY &&
+                      onEventSelected(e, mouseX, mouseY + scrollY)
                     }
                   />
                   {!event.hideDate && (

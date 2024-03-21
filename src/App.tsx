@@ -17,47 +17,59 @@ const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null);
   const [eventDetailsX, setEventDetailsX] = React.useState(0);
   const [eventDetailsY, setEventDetailsY] = React.useState(0);
+  const [scrollY, setScrollY] = React.useState(window.scrollY);
 
   const [screenWidth, setScreenWidth] = React.useState(
-    Math.min(
-      document.documentElement.clientWidth || 0,
-      window.innerWidth || 0
-    )
+    Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0),
   );
-
-  const timelineBottomYRef = useRef(0);
-  const defaultInfoSectionY = screenWidth <= 600 ? TIMELINE_HEIGHT + 290 : TIMELINE_HEIGHT + 180;
+  const defaultInfoSectionY =
+    screenWidth <= 600 ? TIMELINE_HEIGHT + 290 : TIMELINE_HEIGHT + 180;
+  const [timelineBottomY, setTimelineBottomY] =
+    React.useState(defaultInfoSectionY);
 
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(
         Math.min(
           document.documentElement.clientWidth || 0,
-          window.innerWidth || 0
-        )
+          window.innerWidth || 0,
+        ),
       );
       const canvas = document.getElementById("canvas");
       if (canvas) {
-        timelineBottomYRef.current = canvas.getBoundingClientRect().top + window.pageYOffset + TIMELINE_HEIGHT;
+        setTimelineBottomY(
+          canvas.getBoundingClientRect().top + scrollY + TIMELINE_HEIGHT,
+        );
       }
     };
 
     window.addEventListener("resize", handleResize);
 
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-      timelineBottomYRef.current = canvas.getBoundingClientRect().top + window.pageYOffset + TIMELINE_HEIGHT;
-    }
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      setTimelineBottomY(
+        canvas.getBoundingClientRect().top + scrollY + TIMELINE_HEIGHT,
+      );
+    }
+  }, [scrollY, screenWidth]);
 
   const handleEventSelected = (
     event: Event,
     mouseX: number,
-    mouseY: number
+    mouseY: number,
   ): void => {
     setSelectedEvent(event);
     setEventDetailsX(mouseX);
@@ -74,15 +86,22 @@ const App: React.FC = () => {
       <SeeSource />
       <Summary />
       <TimelineTitle />
-      
-            <Timeline
-              onEventSelected={handleEventSelected}
-              onEventDeselected={handleEventDeselected}
-              selectedEvent={selectedEvent}
-              screenWidth={screenWidth}
-            />
-          
-      <div className="infoSection" style={{position: "absolute", top: timelineBottomYRef.current ? timelineBottomYRef.current : defaultInfoSectionY}}>
+
+      <Timeline
+        onEventSelected={handleEventSelected}
+        onEventDeselected={handleEventDeselected}
+        selectedEvent={selectedEvent}
+        screenWidth={screenWidth}
+        scrollY={scrollY}
+      />
+
+      <div
+        className="infoSection"
+        style={{
+          position: "absolute",
+          top: timelineBottomY,
+        }}
+      >
         <TechnicalInfo />
         <PersonalInfo />
       </div>
@@ -92,6 +111,7 @@ const App: React.FC = () => {
           y={eventDetailsY}
           event={selectedEvent}
           onClose={handleEventDeselected}
+          scrollY={scrollY}
         />
       )}
     </div>
