@@ -24,34 +24,30 @@ const Timeline: React.FC<Props> = ({
   screenWidth,
   scrollY,
 }) => {
-  timelineData.sort((a, b) => {
-    const endDateA = a.endDate || a.startDate;
-    const endDateB = b.endDate || b.startDate;
-    return endDateA - endDateB;
-  });
 
   // Constants
   const marginHeight = 8;
   const legendHeight = 20;
-
   const timelineStartDate = timelineData[0].startDate;
   const timelineEndDate = toTs("2025-01-01");
   const totalTime = timelineEndDate - timelineStartDate;
+  const maxTimelineWidth = screenWidth - MARGIN_SIDE * 2 - 10;
 
-  const MAX_TIMELINE_WIDTH = screenWidth - MARGIN_SIDE * 2 - 10;
-
-  const [timelineWidth, setTimelineWidth] = useState(MAX_TIMELINE_WIDTH * 2);
+  //State variables
+  const [timelineWidth, setTimelineWidth] = useState(maxTimelineWidth * 2);
   const [mouseX, setMouseX] = useState<number | undefined>(undefined);
   const [mouseY, setMouseY] = useState<number | undefined>(undefined);
   const [mouseDate, setMouseDate] = useState<number | null>(null);
   const [scrollX, setScrollX] = useState(0);
 
+  //Refs of state variables (avoids unnecessary redraws)
   const mouseXRef = useRef<number | undefined>(undefined);
   const mouseYRef = useRef<number | undefined>(undefined);
   const timelineMarginTopRef = useRef<number | undefined>(undefined);
   const timelineWidthRef = useRef<number>(timelineWidth);
   const scrollXRef = useRef<number>(0);
 
+  //listening to state variable changes and updating refs
   useEffect(() => {
     mouseXRef.current = mouseX;
   }, [mouseX]);
@@ -68,12 +64,15 @@ const Timeline: React.FC<Props> = ({
     timelineWidthRef.current = timelineWidth;
   }, [timelineWidth]);
 
+
+  //listening to configuration changes
   useEffect(() => {
     const canvas = document.getElementById("canvas");
     if (canvas) {
       timelineMarginTopRef.current = canvas.getBoundingClientRect().top;
     }
   }, [scrollY, screenWidth]);
+
 
   const computeAndSetMouseDate = (prevX: number) => {
     const mouseTimestamp =
@@ -89,6 +88,7 @@ const Timeline: React.FC<Props> = ({
     mouseY < timelineMarginTopRef.current + TIMELINE_HEIGHT &&
     mouseY > timelineMarginTopRef.current;
 
+  //scrolling animation
   const anim = new Konva.Animation((frame) => {
     if (selectedEvent) return;
 
@@ -116,7 +116,7 @@ const Timeline: React.FC<Props> = ({
       if (selectedEvent || !isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
-        prevWidth + event.deltaY < MAX_TIMELINE_WIDTH
+        prevWidth + event.deltaY < maxTimelineWidth
           ? prevWidth
           : prevWidth + event.deltaY,
       );

@@ -13,24 +13,20 @@ export const TIMELINE_HEIGHT: number = 250;
 export const LINE_HEIGHT: number = 60;
 export const MARGIN_SIDE: number = 5;
 
+function getScreenWidth() : number{
+  return Math.min(document.documentElement.clientWidth, window.innerWidth);
+}
+
 const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null);
   const [eventDetailsX, setEventDetailsX] = React.useState(0);
   const [eventDetailsY, setEventDetailsY] = React.useState(0);
   const [scrollY, setScrollY] = React.useState(window.scrollY);
-
-  const [screenWidth, setScreenWidth] = React.useState(
-    Math.min(document.documentElement.clientWidth, window.innerWidth),
-  );
+  const [screenWidth, setScreenWidth] = React.useState<number>(getScreenWidth());
 
   useEffect(() => {
     const handleResize = () => {
-      setScreenWidth(
-        Math.min(
-          document.documentElement.clientWidth,
-          window.innerWidth,
-        ),
-      );
+      setScreenWidth(getScreenWidth());
     };
 
     window.addEventListener("resize", handleResize);
