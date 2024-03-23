@@ -78,19 +78,12 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         textAlign: "left",
       }}
     >
-      <span
-        style={{
-          fontSize: "20px",
-          cursor: "pointer",
-          position: "absolute",
-          top: "0",
-          right: "0",
-          padding: "5px 5px 0px 0px",
-        }}
+      <button
+        className="closeButton"
         onClick={onClose}
       >
         ✖
-      </span>
+      </button>
       <h4>{event.label}</h4>
       {event.selfEmployed && (
         <p className="selfEmployed">
@@ -101,11 +94,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       <p>{event.description}</p>
       <p>Duration : {calculateDuration(event)}</p>
       <p>Time allocation : {event.timePercentage}%</p>
-      <div
-        style={{ position: "absolute", left: "-9999px", opacity: 0 }}
-        autoFocus
-        tabIndex={-1}
-      />
     </div>
   );
 };

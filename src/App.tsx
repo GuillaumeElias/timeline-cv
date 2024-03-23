@@ -90,6 +90,12 @@ const App: React.FC = () => {
           scrollY={scrollY}
         />
       )}
+
+      <div
+        style={{ position: "absolute", left: "-9999px", opacity: 0 }}
+        autoFocus
+        tabIndex={-1}
+      />
     </div>
   );
 };
