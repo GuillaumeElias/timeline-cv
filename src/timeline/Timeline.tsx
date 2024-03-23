@@ -151,7 +151,6 @@ const Timeline: React.FC<Props> = ({
         margin: 0,
         padding: 0,
         overflow: "hidden",
-        position: "absolute",
         width: screenWidth - MARGIN_SIDE * 2,
         height: TIMELINE_HEIGHT,
       }}

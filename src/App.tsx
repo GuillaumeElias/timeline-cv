@@ -22,10 +22,6 @@ const App: React.FC = () => {
   const [screenWidth, setScreenWidth] = React.useState(
     Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0),
   );
-  const defaultInfoSectionY =
-    screenWidth <= 600 ? TIMELINE_HEIGHT + 290 : TIMELINE_HEIGHT + 180;
-  const [timelineBottomY, setTimelineBottomY] =
-    React.useState(defaultInfoSectionY);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,12 +31,6 @@ const App: React.FC = () => {
           window.innerWidth || 0,
         ),
       );
-      const canvas = document.getElementById("canvas");
-      if (canvas) {
-        setTimelineBottomY(
-          canvas.getBoundingClientRect().top + scrollY + TIMELINE_HEIGHT,
-        );
-      }
     };
 
     window.addEventListener("resize", handleResize);
@@ -56,15 +46,6 @@ const App: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-      setTimelineBottomY(
-        canvas.getBoundingClientRect().top + scrollY + TIMELINE_HEIGHT,
-      );
-    }
-  }, [scrollY, screenWidth]);
 
   const handleEventSelected = (
     event: Event,
@@ -95,7 +76,7 @@ const App: React.FC = () => {
         scrollY={scrollY}
       />
           
-      <div className="infoSection" style={{position: "absolute", top: timelineBottomY}}>
+      <div className="infoSection">
         <TechnicalInfo />
         <PersonalInfo />
       </div>
