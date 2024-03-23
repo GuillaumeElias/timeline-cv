@@ -101,8 +101,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       <p>{event.description}</p>
       <p>Duration : {calculateDuration(event)}</p>
       <p>Time allocation : {event.timePercentage}%</p>
-      <input
-        type="text"
+      <div
         style={{ position: "absolute", left: "-9999px", opacity: 0 }}
         autoFocus
         tabIndex={-1}
