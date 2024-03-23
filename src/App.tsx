@@ -20,15 +20,15 @@ const App: React.FC = () => {
   const [scrollY, setScrollY] = React.useState(window.scrollY);
 
   const [screenWidth, setScreenWidth] = React.useState(
-    Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0),
+    Math.min(document.documentElement.clientWidth, window.innerWidth),
   );
 
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(
         Math.min(
-          document.documentElement.clientWidth || 0,
-          window.innerWidth || 0,
+          document.documentElement.clientWidth,
+          window.innerWidth,
         ),
       );
     };

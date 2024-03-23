@@ -7,6 +7,8 @@ import UrlImg from "./UrlImg";
 import { LINE_HEIGHT } from "../App";
 import TinyPieChart from "./TinyPieChart";
 
+const isMobile = window.innerWidth < 500;
+
 interface TimelineEventProps {
   index: number;
   x: number;
@@ -64,21 +66,22 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         width={eventWidth}
         height={LINE_HEIGHT + (pointedAt ? 1 : 0)}
         fill={TYPES[event.type]}
-        stroke={TYPES[event.type]}
+        stroke={"white"}
         strokeWidth={1 + (hovered ? 1 : 0)} // 1px border width
       />
       <Text
         x={x + 5}
-        y={y + 10}
+        y={y + (isMobile ? 4 : 10)}
         wrap="word"
         width={eventWidth - 10}
         text={event.label}
         fill="white"
         fontFamily="Courier New, monospace"
         fontStyle={selected ? "bold" : "normal"}
-        fontSize={event.type == "INTERNSHIP" ? 13 : 15}
+        fontSize={event.type == "INTERNSHIP" ? 13 : isMobile ? 14 : 15}
+        height={LINE_HEIGHT}
       />
-      { event.type != "INTERNSHIP" && 
+      { event.type != "INTERNSHIP" && !isMobile &&
         <>
           <UrlImg x={x + eventWidth - 30} y={y + LINE_HEIGHT - 15} width={20} src={getFlagPath(event)} height={10} />
           <TinyPieChart x={x + eventWidth - 50} y={y + LINE_HEIGHT - 15} percentage={event.timePercentage} radius={5} backgroundColor={TYPES[event.type]} />
