@@ -35,7 +35,7 @@ const Timeline: React.FC<Props> = ({
   const totalTime = timelineEndDate - timelineStartDate;
   const canvasWidth = screenWidth - MARGIN_SIDE * 2 - 10;
   const initTimelineWidth =
-    screenWidth > 2000
+    screenWidth > 2500
       ? canvasWidth
       : screenWidth <= 1000
         ? canvasWidth * 2
