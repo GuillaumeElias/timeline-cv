@@ -7,7 +7,10 @@ import { timelineData } from "../data";
 import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
 
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.maxTouchPoints > 0;
+const isTouchDevice =
+  "ontouchstart" in window ||
+  navigator.maxTouchPoints > 0 ||
+  navigator.maxTouchPoints > 0;
 
 interface Props {
   onEventSelected: (event: Event, mouseX: number, mouseY: number) => void;
@@ -24,17 +27,22 @@ const Timeline: React.FC<Props> = ({
   screenWidth,
   scrollY,
 }) => {
-
   // Constants
   const marginHeight = 8;
   const legendHeight = 20;
   const timelineStartDate = timelineData[0].startDate;
   const timelineEndDate = toTs("2025-01-01");
   const totalTime = timelineEndDate - timelineStartDate;
-  const maxTimelineWidth = screenWidth - MARGIN_SIDE * 2 - 10;
+  const canvasWidth = screenWidth - MARGIN_SIDE * 2 - 10;
+  const initTimelineWidth =
+    screenWidth > 2000
+      ? canvasWidth
+      : screenWidth <= 1000
+        ? canvasWidth * 2
+        : canvasWidth * 1.5;
 
   //State variables
-  const [timelineWidth, setTimelineWidth] = useState(maxTimelineWidth * 2);
+  const [timelineWidth, setTimelineWidth] = useState(initTimelineWidth);
   const [mouseX, setMouseX] = useState<number | undefined>(undefined);
   const [mouseY, setMouseY] = useState<number | undefined>(undefined);
   const [mouseDate, setMouseDate] = useState<number | null>(null);
@@ -64,7 +72,6 @@ const Timeline: React.FC<Props> = ({
     timelineWidthRef.current = timelineWidth;
   }, [timelineWidth]);
 
-
   //listening to configuration changes
   useEffect(() => {
     const canvas = document.getElementById("canvas");
@@ -72,7 +79,6 @@ const Timeline: React.FC<Props> = ({
       timelineMarginTopRef.current = canvas.getBoundingClientRect().top;
     }
   }, [scrollY, screenWidth]);
-
 
   const computeAndSetMouseDate = (prevX: number) => {
     const mouseTimestamp =
@@ -116,7 +122,7 @@ const Timeline: React.FC<Props> = ({
       if (selectedEvent || !isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
-        prevWidth + event.deltaY < maxTimelineWidth
+        prevWidth + event.deltaY < canvasWidth
           ? prevWidth
           : prevWidth + event.deltaY,
       );
@@ -151,13 +157,13 @@ const Timeline: React.FC<Props> = ({
         margin: 0,
         padding: 0,
         overflow: "hidden",
-        width: screenWidth - MARGIN_SIDE * 2,
+        width: canvasWidth,
         height: TIMELINE_HEIGHT,
       }}
     >
       <Stage
         id="canvas"
-        width={screenWidth - MARGIN_SIDE * 2}
+        width={canvasWidth}
         height={TIMELINE_HEIGHT}
         onMouseMove={(e) => {
           setMouseX(e.evt.clientX);
@@ -178,23 +184,23 @@ const Timeline: React.FC<Props> = ({
             }}
             draggable
             dragBoundFunc={function (pos) {
-
-              if (!isTouchDevice || (mouseX && mouseX > 0)){ //if not a touch device or mouse has been detected
+              if (!isTouchDevice || (mouseX && mouseX > 0)) {
+                //if not a touch device or mouse has been detected
                 return {
                   x: 0,
-                  y: 0
+                  y: 0,
                 };
               }
 
               let x = pos.x;
 
-              if(x > 0 || x < -timelineWidth + screenWidth){
+              if (x > 0 || x < -timelineWidth + screenWidth) {
                 x = this.absolutePosition().x; //cancel if outside of bounds
               }
 
               return {
                 x: x,
-                y: 0
+                y: 0,
               };
             }}
           >
@@ -256,13 +262,12 @@ const Timeline: React.FC<Props> = ({
                     pause={!!selectedEvent}
                     selected={event == selectedEvent}
                     onEventSelected={(e: Event, x: number, y: number) => {
-                      if(mouseX && mouseY){
-                        onEventSelected(e, mouseX, mouseY)
-                      }else{
+                      if (mouseX && mouseY) {
+                        onEventSelected(e, mouseX, mouseY);
+                      } else {
                         onEventSelected(e, 0, y);
                       }
-                    }
-                    }
+                    }}
                   />
                   {!event.hideDate && (
                     <Text
