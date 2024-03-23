@@ -49,9 +49,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   }
 
   // if there is not enough space for the event height, move it
-  const height = calculateDivHeight();
-  if (y + height > screenHeight - MARGIN_SIDE * 2) {
-    //y = screenHeight - height - MARGIN_SIDE * 2;
+  const estimatedHeight = 260;
+  if (y + estimatedHeight > screenHeight - MARGIN_SIDE * 2) {
+    y = screenHeight - estimatedHeight - MARGIN_SIDE * 2;
+  } else if (y < scrollY) {
+    y = scrollY;
   }
 
   if (x + MOUSE_OFFSET + width > screenWidth - MARGIN_SIDE * 5) {
@@ -78,10 +80,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         textAlign: "left",
       }}
     >
-      <button
-        className="closeButton"
-        onClick={onClose}
-      >
+      <button className="closeButton" onClick={onClose}>
         ✖
       </button>
       <h4>{event.label}</h4>
