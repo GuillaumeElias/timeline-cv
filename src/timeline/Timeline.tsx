@@ -7,6 +7,8 @@ import { timelineData } from "../data";
 import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
 
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.maxTouchPoints > 0;
+
 interface Props {
   onEventSelected: (event: Event, mouseX: number, mouseY: number) => void;
   onEventDeselected: () => void;
@@ -170,6 +172,32 @@ const Timeline: React.FC<Props> = ({
                 onEventDeselected();
               }
             }}
+            onTap={() => {
+              if (selectedEvent) {
+                onEventDeselected();
+              }
+            }}
+            draggable
+            dragBoundFunc={function (pos) {
+
+              if (!isTouchDevice || (mouseX && mouseX > 0)){ //if not a touch device or mouse has been detected
+                return {
+                  x: 0,
+                  y: 0
+                };
+              }
+
+              let x = pos.x;
+
+              if(x > 0 || x < -timelineWidth + screenWidth){
+                x = this.absolutePosition().x; //cancel if outside of bounds
+              }
+
+              return {
+                x: x,
+                y: 0
+              };
+            }}
           >
             <Rect
               id="timeline-background"
@@ -228,10 +256,13 @@ const Timeline: React.FC<Props> = ({
                     event={event}
                     pause={!!selectedEvent}
                     selected={event == selectedEvent}
-                    onEventSelected={(e: Event, x: number, y: number) =>
-                      mouseX &&
-                      mouseY &&
-                      onEventSelected(e, mouseX, mouseY + scrollY)
+                    onEventSelected={(e: Event, x: number, y: number) => {
+                      if(mouseX && mouseY){
+                        onEventSelected(e, mouseX, mouseY)
+                      }else{
+                        onEventSelected(e, 0, y);
+                      }
+                    }
                     }
                   />
                   {!event.hideDate && (

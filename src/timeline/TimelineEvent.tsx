@@ -19,8 +19,6 @@ interface TimelineEventProps {
   pointedAt: boolean;
 }
 
-const EXPANDED_HEIGHT = 200;
-
 const TimelineEvent: React.FC<TimelineEventProps> = ({
   index,
   x,
@@ -30,7 +28,8 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
   onEventSelected,
   pause,
   selected,
-  pointedAt
+  pointedAt,
+
 }) => {
   const [hovered, setHovered] = useState<boolean>(false);
 
@@ -55,6 +54,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
   return (
     <Group
       onClick={handleClick}
+      onTap={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

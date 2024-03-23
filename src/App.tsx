@@ -86,7 +86,7 @@ const App: React.FC = () => {
       <SeeSource />
       <Summary />
       <TimelineTitle />
-
+  
       <Timeline
         onEventSelected={handleEventSelected}
         onEventDeselected={handleEventDeselected}
@@ -94,17 +94,12 @@ const App: React.FC = () => {
         screenWidth={screenWidth}
         scrollY={scrollY}
       />
-
-      <div
-        className="infoSection"
-        style={{
-          position: "absolute",
-          top: timelineBottomY,
-        }}
-      >
+          
+      <div className="infoSection" style={{position: "absolute", top: timelineBottomY}}>
         <TechnicalInfo />
         <PersonalInfo />
       </div>
+
       {selectedEvent && (
         <EventDetails
           x={eventDetailsX}
