@@ -24,14 +24,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   scrollY,
 }) => {
   const eventDetailsContainerRef = useRef<HTMLDivElement>(null);
+  
+  const [height, setHeight] = useState(0)
 
-  const calculateDivHeight = () => {
-    if (!eventDetailsContainerRef.current) {
-      return 0;
-    } else {
-      return eventDetailsContainerRef.current.offsetHeight;
+  useEffect(() => {
+    if(eventDetailsContainerRef.current) {
+      setHeight(eventDetailsContainerRef.current.clientHeight)
     }
-  };
+  })
 
   const screenWidth = Math.min(
     document.documentElement.clientWidth,
@@ -49,9 +49,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   }
 
   // if there is not enough space for the event height, move it
-  const estimatedHeight = 260;
-  if (y + estimatedHeight > screenHeight - MARGIN_SIDE * 2) {
-    y = screenHeight - estimatedHeight - MARGIN_SIDE * 2;
+  if (y + height > screenHeight - MARGIN_SIDE * 2) {
+    y = screenHeight - height - MARGIN_SIDE * 2;
   } else if (y < scrollY) {
     y = scrollY;
   }
@@ -60,7 +59,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     x = screenWidth - MARGIN_SIDE * 5 - width;
   } else {
     x += MOUSE_OFFSET;
-    y += MOUSE_OFFSET;
+    y += MOUSE_OFFSET + scrollY;
   }
 
   return (
