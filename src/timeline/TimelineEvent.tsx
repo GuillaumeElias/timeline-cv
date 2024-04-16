@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Group, Image, Rect, Text } from "react-konva";
-import { tsToStr } from "../dateutil";
+import React, { useState } from "react";
+import { Group, Rect, Text } from "react-konva";
 import { Event, TYPES } from "../types";
 import { getFlagPath } from "../data";
 import UrlImg from "./UrlImg";
@@ -67,17 +66,18 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         height={LINE_HEIGHT + (pointedAt ? 1 : 0)}
         fill={TYPES[event.type]}
         stroke={"white"}
-        strokeWidth={1 + (hovered ? 1 : 0)} // 1px border width
+        strokeWidth={1 + (hovered || selected ? 1 : 0)} // 1px border width
+        opacity={selected ? 0.8 : 1}
       />
       <Text
         x={x + 5}
         y={y + (isMobile ? 4 : 10)}
         wrap="word"
         width={eventWidth - 10}
-        text={event.label}
+        text={event.shortLabel ? event.shortLabel : event.label}
         fill="white"
         fontFamily="Trebuchet MS"
-        fontStyle={selected ? "bold" : "normal"}
+        fontStyle={selected ? "italic" : "normal"}
         fontSize={event.type == "INTERNSHIP" ? 13 : isMobile ? 14 : 15}
         height={LINE_HEIGHT}
       />

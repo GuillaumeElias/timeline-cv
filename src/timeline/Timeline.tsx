@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Rect, Group, Text } from "react-konva";
 import TimelineEvent from "./TimelineEvent";
 import { toTs, tsToShortStr, tsToYearStr, nearestJanuary1stTimestamp } from "../dateutil";
-import { Event, TYPES } from "../types";
+import { Event } from "../types";
 import { timelineData } from "../data";
 import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
@@ -220,6 +220,10 @@ const Timeline: React.FC<Props> = ({
 
               if (x > 0 || x < -timelineWidth + screenWidth) {
                 x = this.absolutePosition().x; //cancel if outside of bounds
+              }
+
+              if(selectedEvent){
+                onEventDeselected();
               }
 
               return {

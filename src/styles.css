@@ -5,7 +5,7 @@
 }
 
 .Summary {
-  text-align: left;
+  text-align: justify;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -65,7 +65,7 @@
 }
 
 .offseted{
-  padding-left: 67px;
+  padding-left: 54px;
 }
 
 .SeeSource {

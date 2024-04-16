@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Event, TYPES } from "../types";
 
-import { MARGIN_SIDE, TIMELINE_HEIGHT } from "../App";
+import { MARGIN_SIDE } from "../App";
 import { getFlagPath } from "../data";
 import { calculateDuration } from "../dateutil";
 
@@ -56,7 +56,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   }
 
   if (x + MOUSE_OFFSET + width > screenWidth - MARGIN_SIDE * 5) {
-    x = screenWidth - MARGIN_SIDE * 5 - width;
+    x = screenWidth - MARGIN_SIDE * 4 - width;
   } else {
     x += MOUSE_OFFSET;
     y += MOUSE_OFFSET + scrollY;
