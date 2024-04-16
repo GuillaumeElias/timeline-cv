@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Rect, Group, Text } from "react-konva";
 import TimelineEvent from "./TimelineEvent";
-import { toTs, tsToShortStr } from "../dateutil";
+import { toTs, tsToShortStr, tsToYearStr, nearestJanuary1stTimestamp } from "../dateutil";
 import { Event, TYPES } from "../types";
 import { timelineData } from "../data";
 import Konva from "konva";
@@ -150,6 +150,30 @@ const Timeline: React.FC<Props> = ({
     };
   }, [selectedEvent, screenWidth]);
 
+
+  //computing year labels
+  const yearLabels = [];
+  let timestamp = nearestJanuary1stTimestamp(timelineStartDate);
+
+  while (timestamp <= timelineEndDate) {
+    const yearOffset = timestamp - timelineStartDate;
+    const yearX = (yearOffset / totalTime) * timelineWidth - scrollX;
+
+    yearLabels.push(
+      <Text
+        key={`year_${timestamp}`}
+        x={MARGIN_SIDE + yearX - 4}
+        y={TIMELINE_HEIGHT - 35}
+        text={"| " + tsToYearStr(timestamp)}
+        fill="black"
+        fontFamily="Trebuchet MS"
+      />
+    );
+  
+    timestamp = nearestJanuary1stTimestamp(timestamp);
+}
+
+
   return (
     <div
       id="timelineWrapper"
@@ -269,19 +293,12 @@ const Timeline: React.FC<Props> = ({
                       }
                     }}
                   />
-                  {!event.hideDate && (
-                    <Text
-                      key={"text_" + index}
-                      x={MARGIN_SIDE + startX - scrollX - 4}
-                      y={TIMELINE_HEIGHT - 35}
-                      text={"| " + tsToShortStr(event.startDate)}
-                      fill="black"
-                      fontFamily="Trebuchet MS"
-                    />
-                  )}
                 </Group>
               );
             })}
+            <>
+              {yearLabels}
+            </>
           </Group>
         </Layer>
       </Stage>

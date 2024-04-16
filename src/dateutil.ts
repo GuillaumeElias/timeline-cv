@@ -35,6 +35,24 @@ export function tsToShortStr(timestamp: number): string {
   return `${year} ${month}`;
 }
 
+export function tsToYearStr(timestamp: number): string {
+  const date = new Date(timestamp);
+  if(!date){
+    return "";
+  }
+  return date.getFullYear().toString();
+}
+
+export function nearestJanuary1stTimestamp(ts: number) {
+  const date = new Date(ts);
+
+  const year = date.getFullYear();
+  const nextJanuary1st = new Date(year + 1, 0, 1);
+  const nearestTimestamp = nextJanuary1st.getTime();
+
+  return nearestTimestamp;
+}
+
 export function calculateDuration(event: Event): string {
   const diff = event.endDate - event.startDate;
   const months = Math.ceil(diff / (1000 * 60 * 60 * 24 * 30));
