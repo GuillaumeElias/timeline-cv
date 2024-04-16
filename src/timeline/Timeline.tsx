@@ -229,7 +229,7 @@ const Timeline: React.FC<Props> = ({
                   y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
                   text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
                   fill="#93003a"
-                  fontFamily="Courier New, monospace"
+                  fontFamily="Trebuchet MS"
                 />
               </>
             )}
@@ -276,7 +276,7 @@ const Timeline: React.FC<Props> = ({
                       y={TIMELINE_HEIGHT - 35}
                       text={"| " + tsToShortStr(event.startDate)}
                       fill="black"
-                      fontFamily="Courier New, monospace"
+                      fontFamily="Trebuchet MS"
                     />
                   )}
                 </Group>

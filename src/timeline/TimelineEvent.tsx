@@ -76,7 +76,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
         width={eventWidth - 10}
         text={event.label}
         fill="white"
-        fontFamily="Courier New, monospace"
+        fontFamily="Trebuchet MS"
         fontStyle={selected ? "bold" : "normal"}
         fontSize={event.type == "INTERNSHIP" ? 13 : isMobile ? 14 : 15}
         height={LINE_HEIGHT}
