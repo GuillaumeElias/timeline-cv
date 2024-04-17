@@ -77,7 +77,7 @@ const App: React.FC = () => {
       <div className="infoSection">
         <TechnicalInfo />
         <PersonalInfo />
-        <PictureOfMe screenWidth={screenWidth}/>
+        <PictureOfMe />
       </div>
 
       {selectedEvent && (
