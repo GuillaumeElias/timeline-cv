@@ -55,12 +55,18 @@
   opacity: 0.7;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .infoSection {
     flex-direction: column;
   }
-  .TechnicalInfo, .PersonalInfo {
+  .TechnicalInfo, .PersonalInfo, .PictureOfMe {
     width: 100%;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .PictureOfMe:hover { 
+    transform: scale(1.1) translateX(-12px) translateY(-15px); 
   }
 }
 
@@ -73,4 +79,10 @@
   top: 0;
   right: 0;
   padding: 5px;
+}
+
+.PictureOfMe{
+  vertical-align:right;
+  transition: all .2s ease-in-out;
+  margin-right: 10px;
 }
