@@ -6,6 +6,7 @@ const TechnicalInfo: React.FC = () => (
     <p>
     <img src="images/cpplogo.svg" height={25} /> Qt wxwidgets JUCE <br/>
     <img src="images/react_ts.png" height={25} /> React/TS with Material UI<br/>
+    <img src="images/android.png" height={25} /> Java/Kotlin/Flutter<br/>
     <img src="images/javalogo.png" height={25} /> Spring<br/>
     <img src="images/python.png" height={25} /> Tkinter, Numpy<br/>
     <img src="images/asm.png" height={25} /> Assembly language and embedded programming (x86/AVR)<br/>
