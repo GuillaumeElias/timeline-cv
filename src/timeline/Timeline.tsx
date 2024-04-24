@@ -266,7 +266,7 @@ const Timeline: React.FC<Props> = ({
                   id="tracking-text"
                   x={mouseX < screenWidth - 100 ? mouseX + 5 : mouseX - 60}
                   y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
-                  text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
+                  text={tsToShortStr(mouseDate || timelineStartDate, i18n.language)} // Convert timestamp to string
                   fill="#93003a"
                   fontFamily="Trebuchet MS"
                 />

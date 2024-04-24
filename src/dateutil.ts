@@ -14,21 +14,43 @@ export function tsToStr(timestamp: number): string {
   return `${year}-${month}-${day}`;
 }
 
-export function tsToShortStr(timestamp: number): string {
-  const months = [
-    "Jan",
-    "Feb",
+const MONTHS_EN = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const MONTHS_FR = [
+  "Jan",
+    "Fév",
     "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Août",
+    "Sept",
     "Oct",
     "Nov",
-    "Dec",
-  ];
+    "Déc"
+]
+
+export function tsToShortStr(timestamp: number, language: string): string {
+
+  let months = MONTHS_EN;
+  if(language.startsWith('fr')){
+    months = MONTHS_FR;
+  }
+
   const date = new Date(timestamp);
   const year = date.getFullYear();
   const month = months[date.getMonth()]; // Get the month abbreviation
@@ -53,7 +75,7 @@ export function nearestJanuary1stTimestamp(ts: number) {
   return nearestTimestamp;
 }
 
-export function calculateDuration(event: Event): string {
+export function calculateDuration(event: Event, language: string): string {
   const diff = event.endDate - event.startDate;
   const months = Math.ceil(diff / (1000 * 60 * 60 * 24 * 30));
   const years = Math.floor(months / 12);
@@ -62,12 +84,12 @@ export function calculateDuration(event: Event): string {
   let duration = "";
 
   if (years > 0) {
-    duration += `${years} ${years === 1 ? "year" : "years"}`;
+    duration += `${years} ${years === 1 ? (language.startsWith('fr') ? "an" : "year") : (language.startsWith('fr') ? "ans" : "years")}`;
     if (remainingMonths > 0) {
-      duration += ` ${remainingMonths} ${remainingMonths === 1 ? "month" : "months"}`;
+      duration += ` ${remainingMonths} ${remainingMonths === 1 ? (language.startsWith('fr') ? "mois" : "month") : (language.startsWith('fr') ? "mois" : "months")}`;
     }
   } else {
-    duration += `${remainingMonths} ${remainingMonths === 1 ? "month" : "months"}`;
+    duration += `${remainingMonths} ${remainingMonths === 1 ? (language.startsWith('fr') ? "mois" : "month") : (language.startsWith('fr') ? "mois" : "months")}`;
   }
 
   return duration;
