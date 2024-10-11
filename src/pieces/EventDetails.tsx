@@ -4,6 +4,7 @@ import { Event, TYPES } from "../types";
 import { MARGIN_SIDE } from "../App";
 import { getFlagPath } from "../data";
 import { calculateDuration } from "../dateutil";
+import { useTranslation } from "react-i18next";
 
 interface EventDetailsProps {
   event: Event;
@@ -23,6 +24,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   onClose,
   scrollY,
 }) => {
+
+  const {i18n, t} = useTranslation();
+
   const eventDetailsContainerRef = useRef<HTMLDivElement>(null);
   
   const [height, setHeight] = useState(0)
@@ -85,13 +89,13 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       <h4>{event.label}</h4>
       {event.selfEmployed && (
         <p className="selfEmployed">
-          <i>Self-employed</i>
+          <i>{t("self-employed")}</i>
         </p>
       )}
       <b>{event.place} </b> <img src={getFlagPath(event)} height={20} />
       <p>{event.description}</p>
-      <p>Duration : {calculateDuration(event)}</p>
-      <p>Time allocation : {event.timePercentage}%</p>
+      <p>{t("duration")} : {calculateDuration(event, i18n.language)}</p>
+      <p>{t("timeAllocation")} : {event.timePercentage}%</p>
     </div>
   );
 };

@@ -4,8 +4,10 @@ import TimelineEvent from "./TimelineEvent";
 import { toTs, tsToShortStr, tsToYearStr, nearestJanuary1stTimestamp } from "../dateutil";
 import { Event } from "../types";
 import { timelineData } from "../data";
+import { timelineDataFr } from "../data_fr";
 import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
+import { useTranslation } from "react-i18next";
 
 const isTouchDevice =
   "ontouchstart" in window ||
@@ -27,6 +29,15 @@ const Timeline: React.FC<Props> = ({
   screenWidth,
   scrollY,
 }) => {
+
+  // Language
+  const {i18n} = useTranslation();
+  let data: Event[] = timelineData;
+
+  if(i18n.language.startsWith("fr")){
+    data = timelineDataFr;
+  }
+
   // Constants
   const marginHeight = 8;
   const legendHeight = 20;
@@ -255,14 +266,14 @@ const Timeline: React.FC<Props> = ({
                   id="tracking-text"
                   x={mouseX < screenWidth - 100 ? mouseX + 5 : mouseX - 60}
                   y={TIMELINE_HEIGHT - 5 - legendHeight / 2} // Adjust vertical position
-                  text={tsToShortStr(mouseDate || timelineStartDate)} // Convert timestamp to string
+                  text={tsToShortStr(mouseDate || timelineStartDate, i18n.language)} // Convert timestamp to string
                   fill="#93003a"
                   fontFamily="Trebuchet MS"
                 />
               </>
             )}
 
-            {timelineData.map((event, index) => {
+            {data.map((event, index) => {
               const startTimeOffset = event.startDate - timelineStartDate;
               const endTimeOffset = event.endDate
                 ? event.endDate - timelineStartDate

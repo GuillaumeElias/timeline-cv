@@ -126,6 +126,10 @@ export const timelineData: Event[] = [
 
 
 export const getFlagPath = (event: Event) : string => {
+  if(event.flagFilename && event.flagFilename.length > 0){
+    return `images/${event.flagFilename}.gif`;
+  }
+
   if(event.country){
     if(event.country.startsWith("[")){
       return event.country;

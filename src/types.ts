@@ -7,6 +7,7 @@ export const TYPES = {
 
 export type Event = {
   label: string;
+  shortLabel?: string;
   startDate: number;
   endDate: number;
   line: number;
@@ -20,4 +21,5 @@ export type Event = {
   fullTime: boolean;
   timePercentage: number;
   selfEmployed: boolean;
+  flagFilename?: string;
 };
