@@ -38,6 +38,10 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
     onEventSelected(event, x, y);
   };
 
+  const handleTap = (e: any) => {
+    onEventSelected(event, x, y);
+  }
+
   const handleMouseEnter = (e: any) => {
     setHovered(true);
     if (!pause) {
@@ -55,7 +59,7 @@ const TimelineEvent: React.FC<TimelineEventProps> = ({
   return (
     <Group
       onClick={handleClick}
-      onTap={handleClick}
+      onTap={handleTap}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

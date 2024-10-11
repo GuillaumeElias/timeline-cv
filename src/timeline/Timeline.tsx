@@ -8,6 +8,7 @@ import { timelineDataFr } from "../data_fr";
 import Konva from "konva";
 import { MARGIN_SIDE, TIMELINE_HEIGHT, LINE_HEIGHT } from "../App";
 import { useTranslation } from "react-i18next";
+import { KonvaEventObject } from "konva/lib/Node";
 
 const isTouchDevice =
   "ontouchstart" in window ||
@@ -58,6 +59,8 @@ const Timeline: React.FC<Props> = ({
   const [mouseY, setMouseY] = useState<number | undefined>(undefined);
   const [mouseDate, setMouseDate] = useState<number | null>(null);
   const [scrollX, setScrollX] = useState(0);
+  const [lastTouchDistance, setLastTouchDistance] = useState<number|null>(null);
+  const [draggable, setDraggable] = useState<boolean>(true);
 
   //Refs of state variables (avoids unnecessary redraws)
   const mouseXRef = useRef<number | undefined>(undefined);
@@ -65,6 +68,7 @@ const Timeline: React.FC<Props> = ({
   const timelineMarginTopRef = useRef<number | undefined>(undefined);
   const timelineWidthRef = useRef<number>(timelineWidth);
   const scrollXRef = useRef<number>(0);
+  const groupRef = useRef<Konva.Group | null>(null);
 
   //listening to state variable changes and updating refs
   useEffect(() => {
@@ -133,10 +137,13 @@ const Timeline: React.FC<Props> = ({
       if (selectedEvent || !isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
-        prevWidth + event.deltaY < canvasWidth
+        prevWidth - event.deltaY < canvasWidth
           ? prevWidth
-          : prevWidth + event.deltaY,
+          : prevWidth - event.deltaY,
       );
+      const xOffset = event.clientX;
+      const addScrollX = - (event.deltaY / 2) * (xOffset / screenWidth);
+      setScrollX(prevScrollX => prevScrollX + addScrollX);
     };
     const handleMouseMove = (event: MouseEvent) => {
       if (selectedEvent) return;
@@ -207,6 +214,7 @@ const Timeline: React.FC<Props> = ({
       >
         <Layer key={0}>
           <Group
+            ref={groupRef}
             onClick={() => {
               if (selectedEvent) {
                 onEventDeselected();
@@ -217,7 +225,38 @@ const Timeline: React.FC<Props> = ({
                 onEventDeselected();
               }
             }}
-            draggable
+            onTouchMove={(e: KonvaEventObject<TouchEvent>) => { //Pinch for zoom behaviour
+              if (e.evt.touches.length === 2) {
+                setDraggable(false);
+            
+                const touch1 = e.evt.touches[0];
+                const touch2 = e.evt.touches[1];
+            
+                const currentDistance = Math.sqrt(
+                  Math.pow(touch1.clientX - touch2.clientX, 2) +
+                  Math.pow(touch1.clientY - touch2.clientY, 2)
+                );
+            
+                const centerX = (touch1.clientX + touch2.clientX) / 2;
+            
+                if (lastTouchDistance) {
+                  const distanceChange = currentDistance - lastTouchDistance;
+                  const newWidth = timelineWidth + distanceChange * 2;
+            
+                  const addScrollX = centerX * (distanceChange * 2 / timelineWidth);
+                  
+                  if(newWidth > canvasWidth){
+                    setTimelineWidth(newWidth);
+                    groupRef.current && groupRef.current.x(groupRef.current.x()-addScrollX*2);
+                  }
+                }
+            
+                setLastTouchDistance(currentDistance);
+                e.evt.preventDefault();
+              }
+            }}
+            onTouchEnd={()=>{setDraggable(true); setLastTouchDistance(null);}}
+            draggable={draggable}
             dragBoundFunc={function (pos) {
               if (!isTouchDevice || (mouseX && mouseX > 0)) {
                 //if not a touch device or mouse has been detected
@@ -304,7 +343,7 @@ const Timeline: React.FC<Props> = ({
                       if (mouseX && mouseY) {
                         onEventSelected(e, mouseX, mouseY);
                       } else {
-                        onEventSelected(e, 0, y);
+                        onEventSelected(e, 0, timelineMarginTopRef.current ? timelineMarginTopRef.current : y);
                       }
                     }}
                   />
