@@ -8,7 +8,11 @@ const hashDetector = {
 
   lookup() {
     const hash = window.location.hash;
-    const lang = hash.split('/')[1];
+    const params = hash.split('/');
+    if(params.length <= 1){
+      return null;
+    }
+    const lang = params[1];
     if (lang && ['fr', 'en'].includes(lang)) {
       return lang;
     }

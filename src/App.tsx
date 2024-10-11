@@ -27,6 +27,7 @@ const App: React.FC = () => {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    window.location.hash = "";
   };
 
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null);
