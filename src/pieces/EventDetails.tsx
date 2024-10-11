@@ -94,8 +94,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       )}
       <b>{event.place} </b> <img src={getFlagPath(event)} height={20} />
       <p>{event.description}</p>
-      <p>Duration : {calculateDuration(event, i18n.language)}</p>
-      <p>Time allocation : {event.timePercentage}%</p>
+      <p>{t("duration")} : {calculateDuration(event, i18n.language)}</p>
+      <p>{t("timeAllocation")} : {event.timePercentage}%</p>
     </div>
   );
 };
