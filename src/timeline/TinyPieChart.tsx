@@ -17,6 +17,7 @@ const TinyPieChart: React.FC<TinyPieChartProps> = ({ x, y, percentage, radius, b
   return (
     <Group x={x} y={y}>
       <Circle x={radius} y={radius} radius={radius} fill={backgroundColor} />
+      <Circle x={radius} y={radius} radius={radius} fill="rgba(0, 0, 0, 0.2)" />
       <Arc
         x={radius}
         y={radius}
