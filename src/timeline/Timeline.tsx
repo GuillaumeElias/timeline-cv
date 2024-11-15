@@ -137,7 +137,7 @@ const Timeline: React.FC<Props> = ({
       if (selectedEvent || !isMouseInTimeline(event.clientY)) return;
       event.preventDefault();
       setTimelineWidth((prevWidth) =>
-        prevWidth - event.deltaY < canvasWidth
+        prevWidth - event.deltaY < canvasWidth //TODO improve check
           ? prevWidth
           : prevWidth - event.deltaY,
       );
@@ -245,10 +245,12 @@ const Timeline: React.FC<Props> = ({
             
                   const addScrollX = centerX * (distanceChange * 2 / timelineWidth);
                   
-                  if(newWidth > canvasWidth){
+                  if(newWidth > canvasWidth){ //TODO improve check
                     setTimelineWidth(newWidth);
                     groupRef.current && groupRef.current.x(groupRef.current.x()-addScrollX*2);
                   }
+                }else{
+                  setDraggable(true);
                 }
             
                 setLastTouchDistance(currentDistance);
